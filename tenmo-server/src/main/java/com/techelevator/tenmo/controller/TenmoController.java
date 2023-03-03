@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.Service.AccountService;
+import com.techelevator.tenmo.Service.RestAccountService;
 import com.techelevator.tenmo.Service.TransferService;
 import com.techelevator.tenmo.Service.UserService;
 import com.techelevator.tenmo.dao.AccountDao;
@@ -32,8 +33,13 @@ import java.util.List;
     private AccountService accountService;
     private TransferService transferService;
 
+    public TenmoController(UserService userService, AccountService accountService, TransferService transferService) {
+        this.userService = userService;
+        this.accountService = accountService;
+        this.transferService = transferService;
+    }
 
-        @RequestMapping(path = "/balance/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/balance/{id}", method = RequestMethod.GET)
         public BigDecimal getBalance(@PathVariable int id) {
           return accountService.balance(id);
         }

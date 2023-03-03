@@ -2,6 +2,7 @@ package com.techelevator.tenmo.dao;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -9,7 +10,7 @@ import com.techelevator.tenmo.model.Account;
 
 import java.math.BigDecimal;
 
-@Service
+@Component
 public class JdbcAccountDao implements AccountDao{
     private final JdbcTemplate jdbcTemplate;
 
@@ -21,9 +22,10 @@ public class JdbcAccountDao implements AccountDao{
     @Override
     public BigDecimal findBalanceById(int userId) {
         //if (userId == null) throw new IllegalArgumentException("Username cannot be null");
+        String sql = "SELECT balance FROM account WHERE user_id = ?";
         int balance;
         try {
-            balance = jdbcTemplate.queryForObject("SELECT balance FROM account WHERE user_id = ?", int.class);
+            balance = jdbcTemplate.queryForObject(sql,int.class, userId);
         } catch (NullPointerException | EmptyResultDataAccessException e) {
             throw new EmptyResultDataAccessException(userId);
             //find a new exception to throw
