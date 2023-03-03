@@ -14,7 +14,6 @@ public class JdbcAccountDao implements AccountDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    //TODO ADD THE ACCOUNT MAPPING
 
     @Override
     public int findBalanceById(int userId) {
@@ -57,5 +56,13 @@ public class JdbcAccountDao implements AccountDao{
     }
 
 
-    //TODO ADD THE MAPPING FUNCTIONS FOR ALL
+
+    private Account mapRowToUser(SqlRowSet rs) {
+        Account account = new Account();
+        account.setUserId(rs.getInt("user_id"));
+        account.setBalance(rs.getInt("balance"));
+        account.setAccountId(rs.getInt("account_id"));
+
+        return account;
+    }
 }

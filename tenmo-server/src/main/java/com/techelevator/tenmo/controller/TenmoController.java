@@ -1,5 +1,9 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.Service.UserService;
+import com.techelevator.tenmo.dao.AccountDao;
+import com.techelevator.tenmo.dao.TransferDao;
+import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.exceptions.InsufficientFunds;
 import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +20,21 @@ import java.util.List;
     @PreAuthorize("isAuthenticated()")
     public class TenmoController {
 
-        @Autowired
-        AccountDAO accountDAO;
-        @Autowired
-        UserDao userDao;
-        @Autowired
-        TransferDAO transferDAO;
-        @Autowired
-        TransferTypeDao transferTypeDao;
-        @Autowired
-        TransferStatusDAO transferStatusDAO;
+
+//        @Autowired
+//        UserDao userDao;
+//        @Autowired
+//        TransferDao transferDAO;
+
+
+//        public TenmoController(UserDao userDao, TransferDao transferDao, AccountDao accountDao){
+//            this.userDao = userDao;
+//            this.transferDAO = transferDao;
+//            this.accountDAO = accountDao;
+//        }
+
+    private UserService userService;
+
 
         @RequestMapping(path = "/balance", method = RequestMethod.GET)
         public Balance getBalance(Principal principal) {
@@ -35,7 +44,7 @@ import java.util.List;
 
         @RequestMapping(path="/users", method = RequestMethod.GET)
         public List<User> getUsers() {
-            return userDao.findAll();
+            return userService.getUsers();
         }
 
         @ResponseStatus(HttpStatus.CREATED)
