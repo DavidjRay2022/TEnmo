@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -45,17 +46,41 @@ public class JdbcAccountDao implements AccountDao{
         return jdbcTemplate.update(sql, balance, userId) == 1;
     }
 
+
+    //rewrite of findAccountById using the mapRow
     @Override
-    public Account findAccountById(int userId) {
-        Account account;
-        try{
-            account = jdbcTemplate.queryForObject("SELECT * FROM account WHERE user_id = ?", Account.class);
-        } catch (NullPointerException | EmptyResultDataAccessException e){
-            throw new EmptyResultDataAccessException(userId);
+    public Account findAccountById(int userId){
+        String sql = "SELECT user_id, account_id, balance FROM account WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+        if (results.next()) {
+            return mapRowToUser(results);
+        } else {
+            return null;
         }
+    }
+
+    private Account mapRowToUser(SqlRowSet rs) {
+        Account account = new Account();
+        account.setUserId(rs.getInt("user_id"));
+        account.setBalance(rs.getInt("balance"));
+        account.setAccountId(rs.getInt("account_id"));
+
         return account;
     }
 
 
     //TODO ADD THE MAPPING FUNCTIONS FOR ALL
+
+
+    //[Old Code]
+//    public Account findAccountById(int userId) {
+//        Account account;
+//        try{
+//            account = jdbcTemplate.queryForObject("SELECT * FROM account WHERE user_id = ?", Account.class);
+//        } catch (NullPointerException | EmptyResultDataAccessException e){
+//            throw new EmptyResultDataAccessException(userId);
+//        }
+//        return account;
+//    }
+
 }
