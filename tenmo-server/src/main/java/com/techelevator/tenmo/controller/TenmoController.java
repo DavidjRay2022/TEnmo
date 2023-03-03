@@ -1,5 +1,7 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.Service.AccountService;
+import com.techelevator.tenmo.Service.TransferService;
 import com.techelevator.tenmo.Service.UserService;
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransferDao;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import com.techelevator.tenmo.model.Account;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -34,12 +37,13 @@ import java.util.List;
 //        }
 
     private UserService userService;
+    private AccountService accountService;
+    private TransferService transferService;
 
 
-        @RequestMapping(path = "/balance", method = RequestMethod.GET)
-        public Balance getBalance(Principal principal) {
-            System.out.println(principal.getName());
-            return accountDAO.getBalance(principal.getName());
+        @RequestMapping(path = "/balance/{id}", method = RequestMethod.GET)
+        public BigDecimal getBalance(@PathVariable int id) {
+          accountService.balance(id);
         }
 
         @RequestMapping(path="/users", method = RequestMethod.GET)
@@ -49,30 +53,12 @@ import java.util.List;
 
         @ResponseStatus(HttpStatus.CREATED)
         @RequestMapping(path="/transfers/{id}", method = RequestMethod.POST)
-        public void addTransfer(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {
+        public void addTransfer(@RequestBody int transferType, int accountFrom, int accountTo, BigDecimal amount) throws InsufficientFunds {
 
-            BigDecimal amountToTransfer = transfer.getAmount();
-            Account accountFrom = accountDAO.getAccountByAccountID(transfer.getAccountFrom());
-            Account accountTo = accountDAO.getAccountByAccountID(transfer.getAccountTo());
-
-            accountFrom.getBalance().sendMoney(amountToTransfer);
-            accountTo.getBalance().receiveMoney(amountToTransfer);
-
-            transferDAO.createTransfer(transfer);
-
-            accountDAO.updateAccount(accountFrom);
-            accountDAO.updateAccount(accountTo);
+        transferService.createTransfer(transferType, accountFrom,accountTo,amount);
         }
 
-        @RequestMapping(path="/transfertype/filter", method = RequestMethod.GET)
-        public TransferType getTransferTypeFromDescription(@RequestParam String description) {
-            return transferTypeDao.getTransferTypeFromDescription(description);
-        }
 
-        @RequestMapping(path="/transferstatus/filter", method = RequestMethod.GET)
-        public TransferStatus getTransferStatusByDescription(@RequestParam String description) {
-            return transferStatusDAO.getTransferStatusByDesc(description);
-        }
 
         @RequestMapping(path="/account/user/{id}", method = RequestMethod.GET)
         public Account getAccountByUserId(@PathVariable int id) {
@@ -81,7 +67,7 @@ import java.util.List;
 
         @RequestMapping(path="/account/{id}", method = RequestMethod.GET)
         public Account getAccountFromAccountId(@PathVariable int id) {
-            return accountDAO.getAccountByAccountID(id);
+            return accountService.findAccountById(id);
         }
 
         @RequestMapping(path="/transfers/user/{userId}", method = RequestMethod.GET)

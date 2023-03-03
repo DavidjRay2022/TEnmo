@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.techelevator.tenmo.dao.AccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.techelevator.tenmo.model.Account;
 
 public class RestAccountService implements  AccountService{
 
@@ -11,8 +12,12 @@ public class RestAccountService implements  AccountService{
     AccountDao accountDAO;
 
     @Override
-    public BigDecimal balance() {
-        System.out.println(principal.getName());
-        return accountDAO.getBalance(principal.getName());
+    public BigDecimal balance(int id) {
+       return accountDAO.findBalanceById(id);
+    }
+
+    @Override
+    public Account findAccountById(int id){
+        accountDAO.findAccountById(id);
     }
 }

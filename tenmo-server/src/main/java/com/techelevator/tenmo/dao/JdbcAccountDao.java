@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.tenmo.model.Account;
+
+import java.math.BigDecimal;
+
 @Service
 public class JdbcAccountDao implements AccountDao{
     private final JdbcTemplate jdbcTemplate;
@@ -16,7 +19,7 @@ public class JdbcAccountDao implements AccountDao{
 
 
     @Override
-    public int findBalanceById(int userId) {
+    public BigDecimal findBalanceById(int userId) {
         //if (userId == null) throw new IllegalArgumentException("Username cannot be null");
         int balance;
         try {
