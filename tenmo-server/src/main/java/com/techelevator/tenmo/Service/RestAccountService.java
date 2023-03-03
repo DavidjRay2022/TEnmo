@@ -18,6 +18,6 @@ public class RestAccountService implements  AccountService{
 
     @Override
     public Account findAccountById(int id){
-        accountDAO.findAccountById(id);
+       return accountDAO.findAccountById(id);
     }
 }
