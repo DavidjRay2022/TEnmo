@@ -24,17 +24,6 @@ import java.util.List;
     public class TenmoController {
 
 
-//        @Autowired
-//        UserDao userDao;
-//        @Autowired
-//        TransferDao transferDAO;
-
-
-//        public TenmoController(UserDao userDao, TransferDao transferDao, AccountDao accountDao){
-//            this.userDao = userDao;
-//            this.transferDAO = transferDao;
-//            this.accountDAO = accountDao;
-//        }
 
     private UserService userService;
     private AccountService accountService;
@@ -59,11 +48,6 @@ import java.util.List;
         }
 
 
-
-        @RequestMapping(path="/account/user/{id}", method = RequestMethod.GET)
-        public Account getAccountByUserId(@PathVariable int id) {
-            return accountDAO.getAccountByUserID(id);
-        }
 
         @RequestMapping(path="/account/{id}", method = RequestMethod.GET)
         public Account getAccountFromAccountId(@PathVariable int id) {
