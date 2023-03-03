@@ -1,0 +1,10 @@
+2023-03-03T09:48:38.7829389 401 : [no body]
+2023-03-03T09:56:09.6389664 401 : [no body]
+2023-03-03T09:56:34.352753 401 : [no body]
+2023-03-03T09:59:05.3078629 401 : [no body]
+2023-03-03T10:06:24.5936796 I/O error on POST request for "http://localhost:8080/login": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+2023-03-03T10:06:56.5154155 401 : [no body]
+2023-03-03T14:52:31.7734658 500 : [{"timestamp":"2023-03-03T20:52:31.744+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
+2023-03-03T14:54:27.966972 500 : [{"timestamp":"2023-03-03T20:54:27.943+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
+2023-03-03T14:56:54.319754 500 : [{"timestamp":"2023-03-03T20:56:54.298+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
+2023-03-03T14:59:11.6908295 500 : [{"timestamp":"2023-03-03T20:59:11.668+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
