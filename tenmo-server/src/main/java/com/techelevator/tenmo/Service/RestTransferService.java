@@ -17,7 +17,29 @@ public class RestTransferService implements  TransferService{
 
     }
 
-    List<Transfer> getTransfersByUserId(@PathVariable int userId){
+   @Override
+    public List<Transfer> getTransfersByUserId(int userId){
 
+       return transferDao.findAll(userId);
+
+    }
+
+   @Override
+    public Transfer getTransferById(int id){
+        return transferDao.findByToId(id);
+    }
+
+    @Override
+    public List<Transfer> getPendingTransfers(int id){
+        return transferDao.getPendingRequests(id);
+    }
+
+    @Override
+    public  List<Transfer> getSentPendingTransfer(int id){
+        return transferDao.getPendingSentRequests(id);
+    }
+    @Override
+    public List<Transfer>getReceivedPendingTransfer(int id){
+        return transferDao.getPendingReceivedRequests(id);
     }
 }

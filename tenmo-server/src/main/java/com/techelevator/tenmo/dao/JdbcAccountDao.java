@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.techelevator.tenmo.model.Account;
 
 import java.math.BigDecimal;
+import java.util.function.BiFunction;
 
 @Service
 public class JdbcAccountDao implements AccountDao{
@@ -28,21 +29,23 @@ public class JdbcAccountDao implements AccountDao{
             throw new EmptyResultDataAccessException(userId);
             //find a new exception to throw
         }
-        return balance;
+        return BigDecimal.valueOf(balance);
     }
 
     @Override
-    public boolean addBalance(int balanceToAdd, int userId) {
-        int balance = findBalanceById(userId);
-        balance += balanceToAdd;
+    public boolean addBalance(BigDecimal balanceToAdd, int userId) {
+        BigDecimal balance = findBalanceById(userId);
+        balance.add(balanceToAdd);
         String sql = "UPDATE account SET balance = ?, WHERE user_id = ?";
         return jdbcTemplate.update(sql,balance,userId) == 1;
+
+        //TODO check how bigdecmial works
     }
 
     @Override
-    public boolean subtractBalance(int balanceToSubtract, int userId) {
-        int balance = findBalanceById(userId);
-        balance -= balanceToSubtract;
+    public boolean subtractBalance(BigDecimal balanceToSubtract, int userId) {
+        BigDecimal balance = findBalanceById(userId);
+        balance.subtract(balanceToSubtract);
         String sql = "UPDATE account SET balance = ?. where user_id = ?";
         return jdbcTemplate.update(sql, balance, userId) == 1;
     }
@@ -57,6 +60,7 @@ public class JdbcAccountDao implements AccountDao{
         }
         return account;
     }
+
 
 
 

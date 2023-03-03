@@ -18,6 +18,9 @@ public class JdbcTransferDao implements TransferDao {
     }
     @Override
     public boolean create(int transferType, int accountFrom, int accountTo, BigDecimal amount) {
+        if (accountFrom == accountTo){
+            return  false;
+        }
         //TODO how would we enforce that you can only create a transfer coming from YOUR account?
         int pendingStatus = 1;
        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) values(?, ?,?,?)";
@@ -65,6 +68,50 @@ public class JdbcTransferDao implements TransferDao {
 
         return transfers;
     }
+
+    @Override
+    public List<Transfer> getPendingRequests(int id){
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE (account_to = ? OR account_from = ?) AND transfer_status_id = 1 ;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id, id);
+        while (results.next()) {
+            Transfer transfer = mapRowToTransfer(results);
+            transfers.add(transfer);
+        }
+
+        return transfers;
+    }
+
+    @Override
+    public List<Transfer> getPendingSentRequests(int id){
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_from = ? AND transfer_status_id = 1 ;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
+        while (results.next()) {
+            Transfer transfer = mapRowToTransfer(results);
+            transfers.add(transfer);
+        }
+
+        return transfers;
+    }
+
+    @Override
+    public List<Transfer> getPendingReceivedRequests(int id){
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_to = ? AND transfer_status_id = 1 ;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
+        while (results.next()) {
+            Transfer transfer = mapRowToTransfer(results);
+            transfers.add(transfer);
+        }
+
+        return transfers;
+    }
+
+
 
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
