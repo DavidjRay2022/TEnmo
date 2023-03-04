@@ -96,6 +96,7 @@ public class App {
 
 	private void viewTransferHistory() {
 		// TODO Auto-generated method stub
+        accountService.getFullTransferHistory(currentUser);
 
 	}
 

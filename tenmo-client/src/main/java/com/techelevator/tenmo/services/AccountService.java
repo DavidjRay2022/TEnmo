@@ -52,7 +52,7 @@ public class AccountService {
 
         //set up transfer object
         transfer.setTransferTypeId(2);
-        transfer.setFromAccount(user.getUser().getId());
+        transfer.setAccountFrom(user.getUser().getId());
 
         while(true) { // let user select who to send money to
 
@@ -64,7 +64,7 @@ public class AccountService {
             int selection = consoleService.promptForInt("Please enter the ID of a user to send money to: ");
 
             if(validIds.contains(selection)){
-                transfer.setToAccount(selection);
+                transfer.setAccountTo(selection);
                 break;
             } else{
                 System.out.println("Please enter a valid user ID");
@@ -131,5 +131,20 @@ public class AccountService {
         return validIds;
 
 
+    }
+
+    public void getFullTransferHistory(AuthenticatedUser user){
+        Transfer[] transfers = null;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, entity, Transfer[].class);
+        transfers = response.getBody();
+        for (Transfer transfer : transfers) {
+
+            System.out.println(transfer.toString());
+        }
     }
 }

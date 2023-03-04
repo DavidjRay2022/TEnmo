@@ -21,12 +21,11 @@ public class JdbcTransferDao implements TransferDao {
         if (transfer.getAccountFrom() == transfer.getAccountTo()){
             return  false;
         }
-        //TODO how would we enforce that you can only create a transfer coming from YOUR account?
+
         int pendingStatus = 1;
        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) values(?, ?,?,?,?)";
         jdbcTemplate.update(sql, transfer.getTransferTypeId(), pendingStatus, getAccountFromUserId(transfer.getAccountFrom()), getAccountFromUserId(transfer.getAccountTo()), transfer.getAmount());
-       //TODO I think I need to add exception handling
-        //TODO how would we
+
         return true;
 
     }
