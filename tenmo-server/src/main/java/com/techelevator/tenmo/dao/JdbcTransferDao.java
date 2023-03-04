@@ -19,14 +19,14 @@ public class JdbcTransferDao implements TransferDao {
         this.jdbcTemplate = jdbcTemplate;
     }
     @Override
-    public boolean create(int transferType, int accountFrom, int accountTo, BigDecimal amount) {
-        if (accountFrom == accountTo){
+    public boolean create(Transfer transfer) {
+        if (transfer.getAccountFrom() == transfer.getAccountTo()){
             return  false;
         }
         //TODO how would we enforce that you can only create a transfer coming from YOUR account?
         int pendingStatus = 1;
-       String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) values(?, ?,?,?)";
-        jdbcTemplate.update(sql, transferType, pendingStatus,accountFrom, accountTo, amount);
+       String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) values(?, ?,?,?,?)";
+        jdbcTemplate.update(sql, transfer.getTransferTypeId(), pendingStatus,transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
        //TODO I think I need to add exception handling
         //TODO how would we
         return true;

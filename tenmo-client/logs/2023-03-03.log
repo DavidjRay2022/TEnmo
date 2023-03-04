@@ -8,3 +8,5 @@
 2023-03-03T14:54:27.966972 500 : [{"timestamp":"2023-03-03T20:54:27.943+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
 2023-03-03T14:56:54.319754 500 : [{"timestamp":"2023-03-03T20:56:54.298+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
 2023-03-03T14:59:11.6908295 500 : [{"timestamp":"2023-03-03T20:59:11.668+00:00","status":500,"error":"Internal Server Error","message":"Cannot invoke \"com.techelevator.tenmo.dao.AccountDao.findBalanceById(int)\" because \"this.accountDAO\" is null","path":"/balance/1006"}]
+2023-03-03T18:29:17.9278213 401 : [no body]
+2023-03-03T19:00:45.0338113 500 : [{"timestamp":"2023-03-04T01:00:45.010+00:00","status":500,"error":"Internal Server Error","message":"PreparedStatementCallback; SQL [INSERT INTO tenmo_user (username, password_hash) VALUES (?, ?) RETU... (532 bytes)]

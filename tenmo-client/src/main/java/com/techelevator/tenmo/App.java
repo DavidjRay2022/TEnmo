@@ -91,7 +91,7 @@ public class App {
 
 	private void viewCurrentBalance() {
 
-        accountService.getBalance(currentUser);
+        System.out.printf("$%,.2f", accountService.getBalance(currentUser));
 	}
 
 	private void viewTransferHistory() {
@@ -106,7 +106,9 @@ public class App {
 
 	private void sendBucks() {
 		// TODO Auto-generated method stub
-       accountService.listUsers(currentUser);
+       accountService.sendBucks(currentUser);
+
+
 
 		
 	}

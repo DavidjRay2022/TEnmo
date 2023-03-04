@@ -1,51 +1,105 @@
 package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class AccountService {
     private final String baseUrl;
     RestTemplate restTemplate = new RestTemplate();
+    private final Scanner scanner = new Scanner(System.in);
+    private final ConsoleService consoleService = new ConsoleService();
 
-    public AccountService(String url) {
-        this.baseUrl = url;
+
+    public AccountService(String baseUrl) {
+        this.baseUrl = baseUrl;
+
     }
 
-
-    public void getBalance(AuthenticatedUser user) {
+    public BigDecimal getBalance(AuthenticatedUser user) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(user.getToken());
         HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<BigDecimal> response = null;
 
 
         try {
-            ResponseEntity<BigDecimal> response = restTemplate.exchange(baseUrl + "balance/" + user.getUser().getId(), HttpMethod.GET, entity, BigDecimal.class);
-            System.out.printf("$%,.2f", response.getBody());
+             response = restTemplate.exchange(baseUrl + "balance/" + user.getUser().getId(), HttpMethod.GET, entity, BigDecimal.class);
+            //System.out.printf("$%,.2f", response.getBody());
+
 
         } catch (RestClientResponseException e) {
             BasicLogger.log(e.getMessage());
         }
 
+        return response.getBody();
+    }
+
+    public void sendBucks(AuthenticatedUser user) {
+
+        Transfer transfer = new Transfer();
+
+        //set up transfer object
+        transfer.setTransferTypeId(2);
+        transfer.setFromAccount(user.getUser().getId());
+
+        while(true) { // let user select who to send money to
+
+
+            List<Integer> validIds = listUsers(user);
+            int selection = consoleService.promptForInt("Please enter the ID of a user to send money to: ");
+
+            if(validIds.contains(selection)){
+                transfer.setToAccount(selection);
+                break;
+            } else{
+                System.out.println("Please enter a valid user ID");
+            }
+
+        }
+        while (true) { // let user select amount to send
+            System.out.printf("Current Balance: $%,.2f\n", getBalance(user));
+            getBalance(user);
+            BigDecimal amount = consoleService.promptForBigDecimal("Please enter the amount to send: ");
+
+            if((amount.compareTo(BigDecimal.ZERO) > 0) && (amount.compareTo(getBalance(user)) != 1)){
+                transfer.setAmount(amount);
+                break;
+
+            } else if (amount.compareTo(BigDecimal.ZERO) < 0){
+                System.out.println("Please enter a positive amount");
+            } else if (amount.compareTo(getBalance(user)) == 1){
+                System.out.println("Must be less than our equal to your current balance");
+            }
+
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
+
+        Transfer returnedUser = restTemplate.postForObject(baseUrl + "transfer", entity, Transfer.class);
+
+
+
+
 
     }
 
-    public void sendBucks() {
+    public List<Integer> listUsers(AuthenticatedUser user) {
 
-    }
-
-    public void listUsers(AuthenticatedUser user) {
+        List<Integer> validIds = new ArrayList<>();
 
         User[] users = null;
 
@@ -56,9 +110,18 @@ public class AccountService {
         ResponseEntity<User[]> response = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, entity, User[].class);
         users = response.getBody();
         for (User userU : users) {
-            System.out.println("Username: " + userU.getUsername());
+
+
+            if (userU.getId() == user.getUser().getId()){ //Skips listing the current logged in user
+                continue;
+            }
+            validIds.add(userU.getId());
+            System.out.println(userU.getUsername() + " ID: "+ userU.getId());
+
+
 
         }
+        return validIds;
 
 
     }

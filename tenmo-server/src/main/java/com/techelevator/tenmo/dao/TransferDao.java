@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TransferDao {
 
-    boolean create(int transferType, int accountFrom, int accountTo, BigDecimal amount);
+    boolean create(Transfer transfer);
     List<Transfer> findAll(int id);
     Transfer findByToId(int id);
     List<Transfer> findByPayee(int accountTo);

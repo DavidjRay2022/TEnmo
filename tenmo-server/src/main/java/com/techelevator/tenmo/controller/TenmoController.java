@@ -50,10 +50,10 @@ import java.util.List;
         }
 
         @ResponseStatus(HttpStatus.CREATED)
-        @RequestMapping(path="/transfers/{id}", method = RequestMethod.POST)
-        public void addTransfer(@RequestBody int transferType, int accountFrom, int accountTo, BigDecimal amount) throws InsufficientFunds {
+        @RequestMapping(path="/transfer", method = RequestMethod.POST)
+        public void addTransfer(@RequestBody Transfer transfer) throws InsufficientFunds {
 
-        transferService.createTransfer(transferType, accountFrom,accountTo,amount);
+        transferService.createTransfer(transfer);
         }
 
 

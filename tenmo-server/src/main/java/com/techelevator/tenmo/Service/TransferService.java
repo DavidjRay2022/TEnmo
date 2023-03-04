@@ -8,7 +8,7 @@ import com.techelevator.tenmo.model.Transfer;
 
 public interface TransferService {
 
-    void createTransfer(int transferType, int accountFrom, int accountTo, BigDecimal amount);
+    void createTransfer(Transfer transfer);
 
     List<Transfer> getTransfersByUserId(int userId);
 

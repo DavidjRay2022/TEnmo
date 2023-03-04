@@ -18,8 +18,8 @@ public class RestTransferService implements  TransferService{
     }
 
     @Override
-    public void createTransfer(int transferType, int accountFrom, int accountTo, BigDecimal amount) {
-        transferDao.create(transferType, accountFrom, accountTo, amount);
+    public void createTransfer(Transfer transfer) {
+        transferDao.create(transfer);
 
     }
 
