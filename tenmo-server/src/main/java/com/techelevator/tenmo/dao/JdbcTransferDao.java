@@ -1,12 +1,10 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class JdbcTransferDao implements TransferDao {
         //TODO how would we enforce that you can only create a transfer coming from YOUR account?
         int pendingStatus = 1;
        String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount) values(?, ?,?,?,?)";
-        jdbcTemplate.update(sql, transfer.getTransferTypeId(), pendingStatus,transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
+        jdbcTemplate.update(sql, transfer.getTransferTypeId(), pendingStatus, getAccountFromUserId(transfer.getAccountFrom()), getAccountFromUserId(transfer.getAccountTo()), transfer.getAmount());
        //TODO I think I need to add exception handling
         //TODO how would we
         return true;
@@ -113,7 +111,13 @@ public class JdbcTransferDao implements TransferDao {
         return transfers;
     }
 
+    @Override
+    public int getAccountFromUserId(int id) {
+        String sql = "SELECT account_id FROM account WHERE user_id =?;";
 
+       return jdbcTemplate.queryForObject(sql, int.class, id);
+
+    }
 
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {

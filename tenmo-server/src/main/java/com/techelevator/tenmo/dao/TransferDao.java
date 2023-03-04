@@ -1,9 +1,7 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransferDao {
@@ -15,5 +13,6 @@ public interface TransferDao {
     List<Transfer> getPendingRequests(int id);
     public List<Transfer> getPendingSentRequests(int id);
     public List<Transfer> getPendingReceivedRequests(int id);
+    public int getAccountFromUserId(int id);
 
 }

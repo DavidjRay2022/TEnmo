@@ -87,6 +87,7 @@ public class AccountService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(user.getToken());
         HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
 
         Transfer returnedUser = restTemplate.postForObject(baseUrl + "transfer", entity, Transfer.class);
