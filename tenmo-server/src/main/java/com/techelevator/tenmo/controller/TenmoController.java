@@ -57,7 +57,6 @@ import java.util.List;
         }
 
 
-
         @RequestMapping(path="/account/{id}", method = RequestMethod.GET)
         public Account getAccountFromAccountId(@PathVariable int id) {
             return accountService.findAccountById(id);

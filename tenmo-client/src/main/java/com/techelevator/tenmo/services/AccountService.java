@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -134,16 +135,20 @@ public class AccountService {
     }
 
     public void getFullTransferHistory(AuthenticatedUser user){
+
         Transfer[] transfers = null;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(user.getToken());
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "users", HttpMethod.GET, entity, Transfer[].class);
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "transfers/user/" + user.getUser().getId(),
+                HttpMethod.GET, entity, Transfer[].class);
         transfers = response.getBody();
+
         for (Transfer transfer : transfers) {
 
+            //FIXME cleanup the wording and formatting on this if time permits.
             System.out.println(transfer.toString());
         }
     }
