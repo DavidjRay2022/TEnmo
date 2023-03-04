@@ -56,8 +56,11 @@ public class AccountService {
 
         while(true) { // let user select who to send money to
 
-
+            System.out.println("");
+            System.out.println("");
+            System.out.println("*********************");
             List<Integer> validIds = listUsers(user);
+            System.out.println("*********************");
             int selection = consoleService.promptForInt("Please enter the ID of a user to send money to: ");
 
             if(validIds.contains(selection)){
@@ -69,8 +72,11 @@ public class AccountService {
 
         }
         while (true) { // let user select amount to send
+            System.out.println("");
+            System.out.println("");
+            System.out.println("*********************");
             System.out.printf("Current Balance: $%,.2f\n", getBalance(user));
-            getBalance(user);
+            System.out.println("*********************");
             BigDecimal amount = consoleService.promptForBigDecimal("Please enter the amount to send: ");
 
             if((amount.compareTo(BigDecimal.ZERO) > 0) && (amount.compareTo(getBalance(user)) != 1)){
