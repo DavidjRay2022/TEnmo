@@ -3,12 +3,13 @@ package com.techelevator.tenmo.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.techelevator.tenmo.exceptions.InsufficientFunds;
 import com.techelevator.tenmo.model.Transfer;
 
 
 public interface TransferService {
 
-    void createTransfer(Transfer transfer);
+    void createTransfer(Transfer transfer) throws InsufficientFunds;
 
     List<Transfer> getTransfersByUserId(int userId);
 

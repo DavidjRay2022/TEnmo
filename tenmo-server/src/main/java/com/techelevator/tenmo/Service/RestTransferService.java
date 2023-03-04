@@ -1,7 +1,10 @@
 package com.techelevator.tenmo.Service;
 
+import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransferDao;
+import com.techelevator.tenmo.exceptions.InsufficientFunds;
 import com.techelevator.tenmo.model.Transfer;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -11,15 +14,30 @@ import java.util.List;
 @Service
 public class RestTransferService implements  TransferService{
 
-    TransferDao transferDao;
+    final private int send = 2;
+    final private int request =1;
 
-    public RestTransferService(TransferDao transferDao) {
+    TransferDao transferDao;
+    AccountDao accountDao;
+
+    public RestTransferService(TransferDao transferDao, AccountDao accountDao) {
         this.transferDao = transferDao;
+        this.accountDao = accountDao;
     }
 
     @Override
-    public void createTransfer(Transfer transfer) {
-        transferDao.create(transfer);
+    public void createTransfer(Transfer transfer) throws InsufficientFunds {
+
+
+        if(transfer.getTransferTypeId() == send){
+            if((transfer.getAmount().compareTo(accountDao.findBalanceById(transfer.getAccountFrom()))  !=1 )){ //check for sufficient funds
+                transferDao.create(transfer);
+                accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountFrom());
+                accountDao.addBalance(transfer.getAmount(), transfer.getAccountTo());
+            }else {
+                throw new InsufficientFunds();
+        }
+        }
 
     }
 

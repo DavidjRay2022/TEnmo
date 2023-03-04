@@ -36,9 +36,9 @@ public class JdbcAccountDao implements AccountDao{
     @Override
     public boolean addBalance(BigDecimal balanceToAdd, int userId) {
         BigDecimal balance = findBalanceById(userId);
-        balance.add(balanceToAdd);
-        String sql = "UPDATE account SET balance = ?, WHERE user_id = ?";
-        return jdbcTemplate.update(sql,balance,userId) == 1;
+        BigDecimal newBalance = balance.add(balanceToAdd);
+        String sql = "UPDATE account SET balance = ? WHERE user_id = ?";
+        return jdbcTemplate.update(sql,newBalance,userId) == 1;
 
         //TODO learn about BigDecimal see why .add is ignored
     }
@@ -46,9 +46,9 @@ public class JdbcAccountDao implements AccountDao{
     @Override
     public boolean subtractBalance(BigDecimal balanceToSubtract, int userId) {
         BigDecimal balance = findBalanceById(userId);
-        balance.subtract(balanceToSubtract);
-        String sql = "UPDATE account SET balance = ?. where user_id = ?";
-        return jdbcTemplate.update(sql, balance, userId) == 1;
+        BigDecimal newBalance = balance.subtract(balanceToSubtract);
+        String sql = "UPDATE account SET balance = ? where user_id = ?";
+        return jdbcTemplate.update(sql, newBalance, userId) == 1;
     }
 
     //rewrite of findAccountById using the mapRow
