@@ -44,13 +44,31 @@ public class Transfer {
         this.amount = amount;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Transfer{" +
+//                "fromAccount=" + accountFrom +
+//                ", toAccount=" + accountTo +
+//                ", transferType=" + transferTypeId +
+//                ", amount=" + amount +
+//                '}';
+//    }
+
     @Override
-    public String toString() {
-        return "Transfer{" +
-                "fromAccount=" + accountFrom +
-                ", toAccount=" + accountTo +
-                ", transferType=" + transferTypeId +
-                ", amount=" + amount +
-                '}';
+    public String toString(){
+        //TODO add transfer status if permits
+        String transferType = "";
+        switch (transferTypeId){
+            case 1:
+                transferType = "Request";
+                break;
+            case 2:
+                transferType = "Send";
+                break;
+        }
+
+
+        return "=====Transfer===== \nFrom Account = " + accountFrom + "\nTo Account = " +
+                accountTo + "\nTransfer Type = " + transferType + "\nAmount = " + amount + "\n";
     }
 }

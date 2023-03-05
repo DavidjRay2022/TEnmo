@@ -148,7 +148,7 @@ public class AccountService {
 
         for (Transfer transfer : transfers) {
 
-            //FIXME cleanup the wording and formatting on this if time permits.
+
             System.out.println(transfer.toString());
         }
     }
