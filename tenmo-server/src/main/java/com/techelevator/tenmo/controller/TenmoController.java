@@ -57,6 +57,7 @@ import java.util.List;
         }
 
 
+
         @RequestMapping(path="/account/{id}", method = RequestMethod.GET)
         public Account getAccountFromAccountId(@PathVariable int id) {
             return accountService.findAccountById(id);
@@ -72,11 +73,6 @@ import java.util.List;
             return transferService.getTransferById(id);
         }
 
-//
-//        @RequestMapping(path="/users/{id}", method = RequestMethod.GET)
-//        public User getUserByUserId(@PathVariable int id) {
-//            return userDao.getUserByUserId(id);
-//        }
 
 
 
@@ -93,6 +89,21 @@ import java.util.List;
     public List<Transfer> getReceivedPendingTransfersByUserId(@PathVariable int userId) {
         return transferService.getReceivedPendingTransfer(userId);
     }
+
+    //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
+    @RequestMapping(path = "/transfers/approve-transfer", method = RequestMethod.PUT)
+    public void approveTransfer(@RequestBody Transfer transfer){
+        transferService.approveTransfer(transfer);
+    }
+
+    //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
+    @RequestMapping(path = "/transfers/user/{userId}/pending-received/{transferId}/1", method = RequestMethod.PUT)
+    public void rejectTransfer(@PathVariable int userId, int transferId){
+        transferService.rejectTransfer(transferId, userId);
+    }
+
+
+
 
 //        @RequestMapping(path="/transfers/{id}", method = RequestMethod.PUT)
 //        public void updateTransferStatus(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {

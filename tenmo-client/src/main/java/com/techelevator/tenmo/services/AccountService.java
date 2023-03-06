@@ -96,8 +96,8 @@ public class AccountService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(user.getToken());
         HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
-
-        Transfer returnedUser = restTemplate.postForObject(baseUrl + "transfer", entity, Transfer.class);
+        //Transfer returnedUser =
+        restTemplate.postForObject(baseUrl + "transfer", entity, Transfer.class);
 
 
 
@@ -134,6 +134,7 @@ public class AccountService {
 
     }
 
+    //TODO the methods I've added
     public void getFullTransferHistory(AuthenticatedUser user){
 
         Transfer[] transfers = null;
@@ -152,4 +153,141 @@ public class AccountService {
             System.out.println(transfer.toString());
         }
     }
+
+    public void requestBucks(AuthenticatedUser user){
+        /*
+        TODO
+        Make a transfer request from list of users use the sendBucks Listing method
+        analyze the sendBucks
+        Create new transfer that has a request set to pending
+        make sure the purchase can't go through unless user accepts it and stuff
+         */
+
+        //////////////////copy and paste from sendBucks////////////////////////////////////////
+        Transfer transfer = new Transfer();
+
+        //set up transfer object
+        transfer.setTransferTypeId(1);
+        transfer.setAccountFrom(user.getUser().getId());
+
+        //FIXME EDIT 1
+        transfer.setTransferStatusId(1); //sets the transfer status to pending.
+
+        while(true) { // let user select who to send money to
+
+            System.out.println("");
+            System.out.println("");
+            System.out.println("*********************");
+            List<Integer> validIds = listUsers(user);
+            System.out.println("*********************");
+            int selection = consoleService.promptForInt("Please enter the ID of a user to request money from: ");
+
+            if(validIds.contains(selection)){
+                transfer.setAccountTo(selection);
+                break;
+            } else{
+                System.out.println("Please enter a valid user ID");
+            }
+
+        }
+        //Fixme add a check in the accept/deny script checking how much money they have.
+
+
+        while (true) { // let user select amount to send
+            System.out.println("");
+            System.out.println("");
+            System.out.println("*********************");
+            System.out.printf("Current Balance: $%,.2f\n", getBalance(user));
+            System.out.println("*********************");
+            BigDecimal amount = consoleService.promptForBigDecimal("Please enter the amount to request: ");
+
+            if((amount.compareTo(BigDecimal.ZERO) > 0) /* && (amount.compareTo(getBalance(user)) != 1)*/){
+                transfer.setAmount(amount);
+                break;
+
+            } else if (amount.compareTo(BigDecimal.ZERO) < 0){
+                System.out.println("Please enter a positive amount");
+            } else if (amount.compareTo(getBalance(user)) == 1){
+                System.out.println("Must be less than our equal to your current balance");
+            }
+
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
+
+       restTemplate.postForObject(baseUrl + "transfer", entity, Transfer.class);
+
+
+    }
+
+    //TODO
+    public void viewSentRequests(AuthenticatedUser user){
+        Transfer[] transfers = null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ///transfers/user/{userId}/pending-sent2
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "transfers/user/" + user.getUser().getId() + "/pending-sent",
+
+                HttpMethod.GET, entity, Transfer[].class);
+        transfers = response.getBody();
+        for(Transfer transfer : transfers){
+            System.out.println(transfer.toString());
+        }
+
+    }
+
+    //TODO was experimenting with making this a list to help w/ approving and rejecting requests
+    public List<Transfer> viewReceivedRequests(AuthenticatedUser user){
+        Transfer[] transfers = null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "transfers/user/" + user.getUser().getId() + "/pending-received",
+
+                HttpMethod.GET, entity, Transfer[].class);
+        transfers = response.getBody();
+        List<Transfer> transferList = Arrays.asList(transfers);
+        for(Transfer transfer : transfers){
+            System.out.println(transfer.toString());
+        }
+        //System.out.println(transferList);
+        return transferList;
+    }
+    public void viewAllPendingRequests(AuthenticatedUser user){
+        Transfer[] transfers = null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Transfer[]> response = restTemplate.exchange(baseUrl + "transfers/user/" + user.getUser().getId() + "/pending",
+
+                HttpMethod.GET, entity, Transfer[].class);
+        transfers = response.getBody();
+        for(Transfer transfer : transfers){
+            System.out.println(transfer.toString());
+        }
+
+
+    }
+    //TODO unfinished, couldn't figure out the best way to use the .put method for updating an entry.
+    public void approveTransfer(AuthenticatedUser user, List<Transfer> transferList, int index){
+        //make a list then pass the index of that transfer into the parameter then go from there
+        Transfer transfer = transferList.get(index); //may be able to just pass it normally.
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(user.getToken());
+        HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
+
+        restTemplate.put(baseUrl + "transfers/approve-transfer", entity);
+
+    }
+    ///transfers/user/{userId}/pending-received/{transferId}/0
+
 }

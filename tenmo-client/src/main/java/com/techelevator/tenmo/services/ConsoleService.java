@@ -45,6 +45,20 @@ public class ConsoleService {
         System.out.println("0: Exit");
         System.out.println();
     }
+    //TODO added.
+    public void printRequestOptions(){
+        System.out.println();
+        System.out.println("1: View all pending requests");
+        System.out.println("2: View pending received requests");
+        System.out.println("3: View pending sent requests");
+        System.out.println("0: Exit");
+        System.out.println();
+    }
+
+    public void receivedRequestOptions(){
+        System.out.println();
+        //TODO number the results and let the user chose if they want to accept or reject that specific request.
+    }
 
     public UserCredentials promptForCredentials() {
         String username = promptForString("Username: ");
@@ -83,6 +97,8 @@ public class ConsoleService {
         System.out.println("\nPress Enter to continue...");
         scanner.nextLine();
     }
+
+
 
     public void printErrorMessage() {
         System.out.println("An error occurred. Check the log for details.");

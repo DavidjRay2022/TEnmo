@@ -9,6 +9,8 @@ public class Transfer {
     private int transferTypeId;
     private BigDecimal amount;
 
+    private int transferStatusId;
+
     public Transfer() {
     }
 
@@ -44,31 +46,34 @@ public class Transfer {
         this.amount = amount;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Transfer{" +
-//                "fromAccount=" + accountFrom +
-//                ", toAccount=" + accountTo +
-//                ", transferType=" + transferTypeId +
-//                ", amount=" + amount +
-//                '}';
-//    }
-
-    @Override
-    public String toString(){
-        //TODO add transfer status if permits
-        String transferType = "";
-        switch (transferTypeId){
-            case 1:
-                transferType = "Request";
-                break;
-            case 2:
-                transferType = "Send";
-                break;
-        }
-
-
-        return "=====Transfer===== \nFrom Account = " + accountFrom + "\nTo Account = " +
-                accountTo + "\nTransfer Type = " + transferType + "\nAmount = " + amount + "\n";
+    public void setTransferStatusId(int transferStatusId){
+        this.transferStatusId = transferStatusId;
     }
+
+    public int getTransferStatusId(){
+        return transferStatusId;
+    }
+
+    //TODO fix the formatting of this to show everything they want to see in the readme
+@Override public String toString(){
+        return "Transfer: , accountFrom, accountTo, TransferType, TransferStatus, Ammount" +
+                accountFrom +" " + accountTo + " " + transferTypeId + " " + transferStatusId + " " + amount;
+}
+//    @Override
+//    public String toString(){
+//        //TODO add transfer status if permits
+//        String transferType = "";
+//        switch (transferTypeId){
+//            case 1:
+//                transferType = "Request";
+//                break;
+//            case 2:
+//                transferType = "Send";
+//                break;
+//        }
+//
+//
+//        return "=====Transfer===== \nFrom Account = " + accountFrom + "\nTo Account = " +
+//                accountTo + "\nTransfer Type = " + transferType + "\nAmount = " + amount + "\n";
+//    }
 }
