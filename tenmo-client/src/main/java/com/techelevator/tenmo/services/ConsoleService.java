@@ -55,9 +55,12 @@ public class ConsoleService {
         System.out.println();
     }
 
-    public void receivedRequestOptions(){
+    public void printApproveOrDeny(){
         System.out.println();
-        //TODO number the results and let the user chose if they want to accept or reject that specific request.
+        System.out.println("1: Approve the request");
+        System.out.println("2: Deny the request");
+        System.out.println("0: Exit");
+        System.out.println();
     }
 
     public UserCredentials promptForCredentials() {

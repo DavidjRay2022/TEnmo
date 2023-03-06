@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class Transfer {
 
+
+    private int id;
     private int accountFrom;
     private int accountTo;
     private int transferTypeId;
@@ -53,27 +55,33 @@ public class Transfer {
     public int getTransferStatusId(){
         return transferStatusId;
     }
+    public int getId() {
+        return id;
+    }
 
-    //TODO fix the formatting of this to show everything they want to see in the readme
-@Override public String toString(){
-        return "Transfer: , accountFrom, accountTo, TransferType, TransferStatus, Ammount" +
-                accountFrom +" " + accountTo + " " + transferTypeId + " " + transferStatusId + " " + amount;
-}
-//    @Override
-//    public String toString(){
-//        //TODO add transfer status if permits
-//        String transferType = "";
-//        switch (transferTypeId){
-//            case 1:
-//                transferType = "Request";
-//                break;
-//            case 2:
-//                transferType = "Send";
-//                break;
-//        }
-//
-//
-//        return "=====Transfer===== \nFrom Account = " + accountFrom + "\nTo Account = " +
-//                accountTo + "\nTransfer Type = " + transferType + "\nAmount = " + amount + "\n";
-//    }
+    public void setId(int transferId) {
+        this.id = transferId;
+    }
+
+
+    @Override
+    public String toString(){
+        //TODO add transfer status if permits
+        String transferType = "";
+        switch (transferTypeId){
+            case 1:
+                transferType = "Request";
+                break;
+            case 2:
+                transferType = "Send";
+                break;
+        }
+        return "=====Transfer===== \n" +
+                "Transfer id = " + id + "\n" +
+                "Transfer Type = " + transferTypeId + "\n"+
+                "From Account = " + accountFrom + "\n"+
+                "To Account = " + accountTo +"\n" +
+                "Of Amount: " + amount +"\n" +
+                "Transfer Status = " + transferTypeId + "\n";
+    }
 }

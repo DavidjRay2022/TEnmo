@@ -109,7 +109,37 @@ public class App {
             menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
             if (menuSelection == 1) {
                 accountService.viewAllPendingRequests(currentUser);
-            } else if (menuSelection == 2) {
+            } else if (menuSelection == 2) { //FIXME not implemented fully!
+                int transferId = -1;
+                while(transferId != 0){
+                    accountService.viewReceivedRequests(currentUser);
+                    transferId = consoleService.promptForInt("Select a transfer id to approve or reject.");
+                    if(accountService.listOfTransferIds(accountService.viewReceivedRequests(currentUser)).contains(transferId)){
+                        int decision = -1;
+                        consoleService.printApproveOrDeny(); //transferId
+                        decision=  consoleService.promptForInt("Please select a number.");
+                        while(decision != 0){
+                            if(decision == 1){
+                                //approve
+                                accountService.approveTransfer(currentUser,transferId);
+                            } else if(decision == 2){
+                                //deny
+                            } else if(decision == 0){
+                                continue;
+                            } else{
+                                System.out.println("Invalid Selection");
+                            }
+                            consoleService.pause();
+                        }
+
+                    } else if (transferId == 0){
+                       continue;
+                    } else{
+                        System.out.println("Invalid Selection");
+                    }
+                    consoleService.pause();
+
+                }
                 //TODO add more here.
                 /*
                 Select account id to approve or reject
@@ -119,8 +149,6 @@ public class App {
                 accountService.acceptRequest(currentUser,(accountid input)
                 accountService.rejectRequest(currentUser,(accountid input)
                  */
-               accountService.viewReceivedRequests(currentUser);
-
             } else if (menuSelection == 3) {
                 accountService.viewSentRequests(currentUser);
             } else if (menuSelection == 0) {

@@ -68,6 +68,7 @@ import java.util.List;
             return transferService.getTransfersByUserId(userId);
         }
 
+        //FIXME Does this work?
         @RequestMapping(path="/transfers/{id}", method = RequestMethod.GET)
         public Transfer getTransferById(@PathVariable int id) {
             return transferService.getTransferById(id);
@@ -91,11 +92,10 @@ import java.util.List;
     }
 
     //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
-    @RequestMapping(path = "/transfers/{id}/approve-transfer", method = RequestMethod.PUT)
-    public void approveTransfer(@PathVariable int id){
+    @RequestMapping(path = "/transfers/user/{userId}/pending/{id}/approve", method = RequestMethod.PUT)
+    public void approveTransfer(@PathVariable int id, @PathVariable int userId){
         transferService.approveTransfer(id);
     }
-
 
 
     //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
@@ -105,28 +105,4 @@ import java.util.List;
     }
 
 
-
-
-//        @RequestMapping(path="/transfers/{id}", method = RequestMethod.PUT)
-//        public void updateTransferStatus(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {
-//
-//            // only go through with the transfer if it is approved
-//            if(transfer.getTransferStatusId() == transferStatusDAO.getTransferStatusByDesc("Approved").getTransferStatusId()) {
-//
-//                BigDecimal amountToTransfer = transfer.getAmount();
-//                Account accountFrom = accountDAO.getAccountByAccountID(transfer.getAccountFrom());
-//                Account accountTo = accountDAO.getAccountByAccountID(transfer.getAccountTo());
-//
-//                accountFrom.getBalance().sendMoney(amountToTransfer);
-//                accountTo.getBalance().receiveMoney(amountToTransfer);
-//
-//                transferDAO.updateTransfer(transfer);
-//
-//                accountDAO.updateAccount(accountFrom);
-//                accountDAO.updateAccount(accountTo);
-//            } else {
-//                transferDAO.updateTransfer(transfer);
-//            }
-//
-//        }
 }

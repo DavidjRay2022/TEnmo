@@ -15,4 +15,5 @@ public interface TransferDao {
     public List<Transfer> getPendingReceivedRequests(int id);
     public int getAccountFromUserId(int id);
 
+    void updateTransfer(Transfer transfer);
 }
