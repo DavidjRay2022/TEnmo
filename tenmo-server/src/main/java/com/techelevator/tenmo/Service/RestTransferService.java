@@ -38,6 +38,14 @@ public class RestTransferService implements  TransferService{
                 throw new InsufficientFunds();
         }
         }
+        if(transfer.getTransferTypeId() == request){
+            if(transfer.getAmount().compareTo(accountDao.findBalanceById(transfer.getAccountTo())) != 1){
+                 transferDao.create(transfer);
+                 //TODO add function that will update the transfer when accepted or denied
+            } else {
+                throw new InsufficientFunds();
+            }
+        }
 
     }
 
@@ -45,6 +53,29 @@ public class RestTransferService implements  TransferService{
     public List<Transfer> getTransfersByUserId(int userId){
 
        return transferDao.findAll(userId);
+
+    }
+
+   //TODO unable to implement this method like I wanted, hopefully you can figure it out.
+    public void approveTransfer(int transferId){
+        /*
+        Check the amount in balance compared to transfer
+        if sufficient balance, allow the transfer and update that specific transfer to transfer
+         */
+        Transfer transfer =getTransferById(transferId);
+            if(transfer.getTransferTypeId() == 1 && transfer.getTransferStatusId() == 1){ //checks if its a request and a pending transfer.
+                accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountTo()); //subtract from the reciever of the request
+                accountDao.addBalance(transfer.getAmount(), transfer.getAccountFrom()); //add the to the requester
+                transfer.setTransferStatusId(2); //sets status to approved.
+            } else {
+                //return some error?
+            }
+
+
+    }
+
+    //TODO incomplete like above
+    public void rejectTransfer(int transferId){
 
     }
 
@@ -66,4 +97,7 @@ public class RestTransferService implements  TransferService{
     public List<Transfer>getReceivedPendingTransfer(int id){
         return transferDao.getPendingReceivedRequests(id);
     }
+
+
+
 }

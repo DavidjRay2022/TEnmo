@@ -73,11 +73,6 @@ import java.util.List;
             return transferService.getTransferById(id);
         }
 
-//
-//        @RequestMapping(path="/users/{id}", method = RequestMethod.GET)
-//        public User getUserByUserId(@PathVariable int id) {
-//            return userDao.getUserByUserId(id);
-//        }
 
 
 
@@ -94,6 +89,23 @@ import java.util.List;
     public List<Transfer> getReceivedPendingTransfersByUserId(@PathVariable int userId) {
         return transferService.getReceivedPendingTransfer(userId);
     }
+
+    //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
+    @RequestMapping(path = "/transfers/{id}/approve-transfer", method = RequestMethod.PUT)
+    public void approveTransfer(@PathVariable int id){
+        transferService.approveTransfer(id);
+    }
+
+
+
+    //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
+    @RequestMapping(path = "/transfers/{id}/reject-transfer", method = RequestMethod.PUT)
+    public void rejectTransfer(@PathVariable int id){
+        transferService.rejectTransfer(id);
+    }
+
+
+
 
 //        @RequestMapping(path="/transfers/{id}", method = RequestMethod.PUT)
 //        public void updateTransferStatus(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {

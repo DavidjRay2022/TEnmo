@@ -30,12 +30,25 @@ public class JdbcTransferDao implements TransferDao {
 
     }
 
+    //TODO added to methods so they can retrieve the accountId versus the userid
+    public int convertUserIdToAccount(int id){
+        //Code to retrieve the AccountId from the given userId//
+        String accountIdSql = "SELECT account_id FROM account WHERE user_id = ?;";
+
+        int accountId = jdbcTemplate.queryForObject(accountIdSql, int.class, id);
+        ////////////////////////////////////////////////////////
+        return accountId;
+    }
     @Override
     public List<Transfer> findAll(int id) {
         List<Transfer> transfers = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_from =? OR account_to = ?;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id , id);
+      int accountId= convertUserIdToAccount(id);
+
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+                "FROM transfer WHERE account_from = ? OR account_to = ?;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId , accountId);
         while (results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);
@@ -70,10 +83,11 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public List<Transfer> getPendingRequests(int id){
+        int accountId = getAccountFromUserId(id);
         List<Transfer> transfers = new ArrayList<>();
         String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE (account_to = ? OR account_from = ?) AND transfer_status_id = 1 ;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id, id);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,accountId, accountId);
         while (results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);
@@ -84,10 +98,11 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public List<Transfer> getPendingSentRequests(int id){
+        int accountId = getAccountFromUserId(id);
         List<Transfer> transfers = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_from = ? AND transfer_status_id = 1 ;";
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_from = ? AND transfer_status_id = 1 AND transfer_type_id = 2;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,accountId);
         while (results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);
@@ -98,10 +113,11 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public List<Transfer> getPendingReceivedRequests(int id){
+        int accountId = getAccountFromUserId(id);
         List<Transfer> transfers = new ArrayList<>();
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_to = ? AND transfer_status_id = 1 ;";
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE account_to = ? AND transfer_status_id = 1 AND transfer_type_id = 1;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,id);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,accountId);
         while (results.next()) {
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);

@@ -95,18 +95,46 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
+
         accountService.getFullTransferHistory(currentUser);
 
 	}
 
+    //TODO format the menu and toString in the model/Transfer
+    //if you want to edit the wording of the menu its in the console service line 49.
 	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
+        int menuSelection = -1;
+        while (menuSelection != 0) {
+            consoleService.printRequestOptions();
+            menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
+            if (menuSelection == 1) {
+                accountService.viewAllPendingRequests(currentUser);
+            } else if (menuSelection == 2) {
+                //TODO add more here.
+                /*
+                Select account id to approve or reject
+                check if account id is included in accountService.viewRecieved
+                give prompt to approve reject or exit
+                if approved
+                accountService.acceptRequest(currentUser,(accountid input)
+                accountService.rejectRequest(currentUser,(accountid input)
+                 */
+               accountService.viewReceivedRequests(currentUser);
+
+            } else if (menuSelection == 3) {
+                accountService.viewSentRequests(currentUser);
+            } else if (menuSelection == 0) {
+                continue;
+            } else {
+                System.out.println("Invalid Selection");
+            }
+            consoleService.pause();
+        }
 		
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
+
        accountService.sendBucks(currentUser);
 
 
@@ -115,8 +143,8 @@ public class App {
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
+
+		accountService.requestBucks(currentUser);
 	}
 
 }

@@ -18,4 +18,8 @@ public interface TransferService {
     List<Transfer> getSentPendingTransfer(int id);
     List<Transfer>getReceivedPendingTransfer(int id);
 
+    //TODO added to interface.
+    public void approveTransfer(int transferId);
+    public void rejectTransfer(int transferId);
+
 }
