@@ -57,45 +57,26 @@ public class RestTransferService implements  TransferService{
     }
 
    //TODO unable to implement this method like I wanted, hopefully you can figure it out.
-    public void approveTransfer(Transfer transfer){
+    public void approveTransfer(int transferId){
         /*
         Check the amount in balance compared to transfer
         if sufficient balance, allow the transfer and update that specific transfer to transfer
          */
-            //checks if the accounts of the account reciever and the userid from the url match.
+        Transfer transfer =getTransferById(transferId);
             if(transfer.getTransferTypeId() == 1 && transfer.getTransferStatusId() == 1){ //checks if its a request and a pending transfer.
                 accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountTo()); //subtract from the reciever of the request
                 accountDao.addBalance(transfer.getAmount(), transfer.getAccountFrom()); //add the to the requester
-                transfer.setTransferStatusId(2); //sets status to aproved.
+                transfer.setTransferStatusId(2); //sets status to approved.
             } else {
-                //idk if needed.
+                //return some error?
             }
-
-
-//        Transfer transfer = getTransferById(transferID);
-//        if(transferDao.getAccountFromUserId(userId) == transfer.getAccountTo()){ //checks if the accounts of the account reciever and the userid from the url match.
-//            if(transfer.getTransferTypeId() == 1 && transfer.getTransferStatusId() == 1){ //checks if its a request and a pending transfer.
-//                accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountTo()); //subtract from the reciever of the request
-//                accountDao.addBalance(transfer.getAmount(), transfer.getAccountFrom()); //add the to the requester
-//                transfer.setTransferStatusId(2); //sets status to aproved.
-//            } else {
-//                //idk if needed.
-//            }
-//        }
 
 
     }
 
     //TODO incomplete like above
-    public void rejectTransfer(int transferID, int userId){
-        Transfer transfer = getTransferById(transferID);
-        if(transferDao.getAccountFromUserId(userId) == transfer.getAccountTo()){ //checks if the accounts of the account reciever and the userid from the url match.
-            if(transfer.getTransferTypeId() == 1 && transfer.getTransferStatusId() == 1){ //checks if its a request and a pending transfer.
-                transfer.setTransferStatusId(3); //sets status to rejected.
-            } else {
-                //idk if needed.
-            }
-        }
+    public void rejectTransfer(int transferId){
+
     }
 
    @Override

@@ -91,15 +91,17 @@ import java.util.List;
     }
 
     //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
-    @RequestMapping(path = "/transfers/approve-transfer", method = RequestMethod.PUT)
-    public void approveTransfer(@RequestBody Transfer transfer){
-        transferService.approveTransfer(transfer);
+    @RequestMapping(path = "/transfers/{id}/approve-transfer", method = RequestMethod.PUT)
+    public void approveTransfer(@PathVariable int id){
+        transferService.approveTransfer(id);
     }
 
+
+
     //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
-    @RequestMapping(path = "/transfers/user/{userId}/pending-received/{transferId}/1", method = RequestMethod.PUT)
-    public void rejectTransfer(@PathVariable int userId, int transferId){
-        transferService.rejectTransfer(transferId, userId);
+    @RequestMapping(path = "/transfers/{id}/reject-transfer", method = RequestMethod.PUT)
+    public void rejectTransfer(@PathVariable int id){
+        transferService.rejectTransfer(id);
     }
 
 

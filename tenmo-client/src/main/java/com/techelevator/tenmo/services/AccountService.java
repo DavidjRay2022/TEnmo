@@ -255,6 +255,7 @@ public class AccountService {
         transfers = response.getBody();
         List<Transfer> transferList = Arrays.asList(transfers);
         for(Transfer transfer : transfers){
+            //maybe include counter
             System.out.println(transfer.toString());
         }
         //System.out.println(transferList);
@@ -277,15 +278,17 @@ public class AccountService {
 
     }
     //TODO unfinished, couldn't figure out the best way to use the .put method for updating an entry.
-    public void approveTransfer(AuthenticatedUser user, List<Transfer> transferList, int index){
+    public void approveTransfer(AuthenticatedUser user, int id){
+        //FIXME work in progress 3:42.
         //make a list then pass the index of that transfer into the parameter then go from there
-        Transfer transfer = transferList.get(index); //may be able to just pass it normally.
+        //Transfer transfer = transferList.get(index); //may be able to just pass it normally.
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(user.getToken());
-        HttpEntity<Transfer> entity = new HttpEntity<>(transfer, headers);
+        HttpEntity<Transfer> entity = new HttpEntity<>(headers);
 
-        restTemplate.put(baseUrl + "transfers/approve-transfer", entity);
+        //approve transfer and edit it in the server side?
+        restTemplate.put(baseUrl + "transfers/" +id + "/approve-transfer", entity);
 
     }
     ///transfers/user/{userId}/pending-received/{transferId}/0

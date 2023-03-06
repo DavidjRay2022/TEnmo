@@ -111,8 +111,16 @@ public class App {
                 accountService.viewAllPendingRequests(currentUser);
             } else if (menuSelection == 2) {
                 //TODO add more here.
-
+                /*
+                Select account id to approve or reject
+                check if account id is included in accountService.viewRecieved
+                give prompt to approve reject or exit
+                if approved
+                accountService.acceptRequest(currentUser,(accountid input)
+                accountService.rejectRequest(currentUser,(accountid input)
+                 */
                accountService.viewReceivedRequests(currentUser);
+
             } else if (menuSelection == 3) {
                 accountService.viewSentRequests(currentUser);
             } else if (menuSelection == 0) {
