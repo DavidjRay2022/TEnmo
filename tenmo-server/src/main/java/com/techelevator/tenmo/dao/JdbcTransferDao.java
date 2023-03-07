@@ -60,11 +60,12 @@ public class JdbcTransferDao implements TransferDao {
     @Override
     public Transfer findByToId(int id) {
         String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount FROM transfer WHERE transfer_id = ?;";
-
+        Transfer transfer = null;
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
-
-
-        return mapRowToTransfer(result);
+        if(result.next()){
+            transfer = mapRowToTransfer(result);
+        }
+        return transfer;
     }
 
     @Override
@@ -132,6 +133,14 @@ public class JdbcTransferDao implements TransferDao {
 
        return jdbcTemplate.queryForObject(sql, int.class, id);
 
+    }
+
+    public void updateTransfer(Transfer transfer){ //maybe make a boolean
+        String sql ="UPDATE transfer" +
+                "SET transfer_type_id = ?, transfer_status_id = ?, account_from = ?, account_to = ?, amount = ?" +
+                "WHERE transfer_id = ?";
+        jdbcTemplate.update(sql, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(),
+                transfer.getAmount(), transfer.getId());
     }
 
 

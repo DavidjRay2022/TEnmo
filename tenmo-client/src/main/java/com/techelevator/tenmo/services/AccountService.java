@@ -148,8 +148,7 @@ public class AccountService {
         transfers = response.getBody();
 
         for (Transfer transfer : transfers) {
-
-
+            //System.out.println(transfer.getId());
             System.out.println(transfer.toString());
         }
     }
@@ -280,17 +279,36 @@ public class AccountService {
     //TODO unfinished, couldn't figure out the best way to use the .put method for updating an entry.
     public void approveTransfer(AuthenticatedUser user, int id){
         //FIXME work in progress 3:42.
-        //make a list then pass the index of that transfer into the parameter then go from there
-        //Transfer transfer = transferList.get(index); //may be able to just pass it normally.
+        Transfer transfer = new Transfer();
+        transfer.setId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(user.getToken());
+        //may not need the transfer in header, seeing where this goes
+        HttpEntity<Transfer> entity = new HttpEntity<>(headers);
+
+        //approve transfer and edit it in the server side?
+        //restTemplate.exchange(baseUrl + "transfers/" +id + "/approve-transfer", HttpMethod.PUT, entity, Void.class);
+        restTemplate.exchange(baseUrl+"/transfers/user/"+ user.getUser().getId() +"/pending/"+ id +"/approve", HttpMethod.PUT,entity,Void.class);
+
+    }
+    ///transfers/user/{userId}/pending-received/{transferId}/0
+
+    public void denyTransfer(AuthenticatedUser user, int id){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(user.getToken());
         HttpEntity<Transfer> entity = new HttpEntity<>(headers);
 
-        //approve transfer and edit it in the server side?
-        restTemplate.put(baseUrl + "transfers/" +id + "/approve-transfer", entity);
-
+        //should deny transfer?
+        restTemplate.put(baseUrl + "transfers/" +id + "/reject-transfer", entity);
     }
-    ///transfers/user/{userId}/pending-received/{transferId}/0
-
+    public List<Integer> listOfTransferIds(List<Transfer> transferList){
+        List<Integer> transferIds = new ArrayList<>();
+        for(Transfer transfer:transferList){
+            //FIXME add transfer ids to a list to chose from.
+            transferIds.add(transfer.getId());
+        }
+        return  transferIds;
+    }
 }
