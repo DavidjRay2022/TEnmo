@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface TransferDao {
 
-    boolean create(Transfer transfer);
+    boolean createSentTransfer(Transfer transfer);
+    boolean createRequestTransfer(Transfer transfer);
     List<Transfer> findAll(int id);
-    Transfer findByToId(int id);
+    Transfer findById(int id);
     List<Transfer> findByPayee(int accountTo);
     List<Transfer> getPendingRequests(int id);
     public List<Transfer> getPendingSentRequests(int id);

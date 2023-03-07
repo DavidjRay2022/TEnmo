@@ -1,87 +1,52 @@
 package com.techelevator.tenmo.model;
 
-import java.math.BigDecimal;
 
+import java.math.BigDecimal;
+import lombok.Data;
+@Data
 public class Transfer {
 
 
     private int id;
     private int accountFrom;
+    private String accountFromUN;
+
     private int accountTo;
+    private String accountToUN;
     private int transferTypeId;
     private BigDecimal amount;
 
     private int transferStatusId;
-
-    public Transfer() {
-    }
-
-    public int getAccountFrom() {
-        return accountFrom;
-    }
-
-    public void setAccountFrom(int accountFrom) {
-        this.accountFrom = accountFrom;
-    }
-
-    public int getAccountTo() {
-        return accountTo;
-    }
-
-    public void setAccountTo(int accountTo) {
-        this.accountTo = accountTo;
-    }
-
-    public int getTransferTypeId() {
-        return transferTypeId;
-    }
-
-    public void setTransferTypeId(int transferTypeId) {
-        this.transferTypeId = transferTypeId;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public void setTransferStatusId(int transferStatusId){
-        this.transferStatusId = transferStatusId;
-    }
-
-    public int getTransferStatusId(){
-        return transferStatusId;
-    }
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int transferId) {
-        this.id = transferId;
-    }
+    private int accountFromUserId;
+    private int accountToUserId;
 
 
     @Override
     public String toString(){
-        //TODO add transfer status if permits
-        String transferType = "";
-        switch (transferTypeId){
-            case 1:
-                transferType = "Request";
-                break;
-            case 2:
-                transferType = "Send";
-                break;
+        String transferStatus = "";
+        String transferType ="";
+
+        switch (transferStatusId){
+            case 1: transferStatus = "Pending";
+            break;
+            case 2: transferStatus ="Approved";
+            break;
+            case 3: transferStatus = "Rejected";
+            break;
         }
+        switch (transferTypeId){
+            case 1: transferType  = "Requested";
+            break;
+            case 2: transferType = "Sent";
+            break;
+        }
+
         return "=====Transfer===== \n" +
                 "Transfer id = " + id + "\n" +
-                "Transfer Type = " + transferTypeId + "\n"+
-                "From Account = " + accountFrom + "\n"+
-                "To Account = " + accountTo +"\n" +
+                "Transfer Type = " + transferType + "\n"+
+                "From Account = " + accountFrom + " ("+ accountFromUN + ")" + "\n"+
+                "To Account = " + accountTo +" (" + accountToUN + ")" +"\n" +
                 "Of Amount: " + amount +"\n" +
-                "Transfer Status = " + transferTypeId + "\n";
+                "Transfer Status = " + transferStatus + "\n";
     }
 }

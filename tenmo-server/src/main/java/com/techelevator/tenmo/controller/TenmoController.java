@@ -92,9 +92,10 @@ import java.util.List;
     }
 
     //TODO unfinished methods, couldn't figure out the best way to update the transfer when it was approved or rejected.
-    @RequestMapping(path = "/transfers/user/{userId}/pending/{id}/approve", method = RequestMethod.PUT)
-    public void approveTransfer(@PathVariable int id, @PathVariable int userId){
+    @RequestMapping(path = "/transfers/approve/{id}", method = RequestMethod.PUT)
+    public boolean approveTransfer(@PathVariable int id) throws InsufficientFunds {
         transferService.approveTransfer(id);
+        return true;
     }
 
 

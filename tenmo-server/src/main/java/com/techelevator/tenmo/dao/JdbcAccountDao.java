@@ -40,7 +40,6 @@ public class JdbcAccountDao implements AccountDao{
         String sql = "UPDATE account SET balance = ? WHERE user_id = ?";
         return jdbcTemplate.update(sql,newBalance,userId) == 1;
 
-        //TODO learn about BigDecimal see why .add is ignored
     }
 
     @Override
@@ -61,6 +60,12 @@ public class JdbcAccountDao implements AccountDao{
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int findUserIdByAccountNumber(int userId) {
+        String sql = "SELECT user_id FROM account WHERE account_id = ?;";
+        return jdbcTemplate.queryForObject(sql, int.class, userId);
     }
 
 

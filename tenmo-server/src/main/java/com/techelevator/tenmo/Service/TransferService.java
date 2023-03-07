@@ -19,7 +19,7 @@ public interface TransferService {
     List<Transfer>getReceivedPendingTransfer(int id);
 
     //TODO added to interface.
-    public void approveTransfer(int id);
+    public void approveTransfer(int id) throws InsufficientFunds;
     public void rejectTransfer(int transferId);
 
 }

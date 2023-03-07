@@ -4,11 +4,8 @@ import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.exceptions.InsufficientFunds;
 import com.techelevator.tenmo.model.Transfer;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -16,6 +13,9 @@ public class RestTransferService implements  TransferService{
 
     final private int send = 2;
     final private int request =1;
+    final private int pending =1;
+    final private int approved = 2;
+    final private int rejected = 3;
 
     TransferDao transferDao;
     AccountDao accountDao;
@@ -31,7 +31,7 @@ public class RestTransferService implements  TransferService{
 
         if(transfer.getTransferTypeId() == send){
             if((transfer.getAmount().compareTo(accountDao.findBalanceById(transfer.getAccountFrom()))  !=1 )){ //check for sufficient funds
-                transferDao.create(transfer);
+                transferDao.createSentTransfer(transfer);
                 accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountFrom());
                 accountDao.addBalance(transfer.getAmount(), transfer.getAccountTo());
             }else {
@@ -40,7 +40,7 @@ public class RestTransferService implements  TransferService{
         }
         if(transfer.getTransferTypeId() == request){
             if(transfer.getAmount().compareTo(accountDao.findBalanceById(transfer.getAccountTo())) != 1){
-                 transferDao.create(transfer);
+                 transferDao.createRequestTransfer(transfer);
                  //TODO add function that will update the transfer when accepted or denied
             } else {
                 throw new InsufficientFunds();
@@ -54,24 +54,31 @@ public class RestTransferService implements  TransferService{
 
        return transferDao.findAll(userId);
 
+
     }
 
    //TODO unable to implement this method like I wanted, hopefully you can figure it out.
-    public void approveTransfer(int id){
+    public void approveTransfer(int id) throws InsufficientFunds {
         /*
         Check the amount in balance compared to transfer
         if sufficient balance, allow the transfer and update that specific transfer to transfer
          */
-        Transfer transfer = getTransferById(id); //fix
-        //transfer =getTransferById(transferId);
+        Transfer transfer = getTransferById(id);
+
+
             if(transfer.getTransferTypeId() == 1 && transfer.getTransferStatusId() == 1){ //checks if its a request and a pending transfer.
-                accountDao.subtractBalance(transfer.getAmount(), transfer.getAccountTo()); //subtract from the reciever of the request
-                accountDao.addBalance(transfer.getAmount(), transfer.getAccountFrom()); //add the to the requester
-                transfer.setTransferStatusId(2); //sets status to approved.
-                transferDao.updateTransfer(transfer);
+                if((transfer.getAmount().compareTo(accountDao.findBalanceById(accountDao.findUserIdByAccountNumber(transfer.getAccountTo())))  !=1 )){ //check for sufficient funds
+                    accountDao.addBalance(transfer.getAmount(), accountDao.findUserIdByAccountNumber(transfer.getAccountFrom()));
+                    accountDao.subtractBalance(transfer.getAmount(), accountDao.findUserIdByAccountNumber(transfer.getAccountTo()));
+                    transfer.setTransferStatusId(approved);
+                    transferDao.updateTransfer(transfer);
+                }else {
+                    throw new InsufficientFunds();
+                }
 
             } else {
                 //return some error?
+                throw new IllegalArgumentException();  //TODO do we this this is the correct thing to throw?
             }
 
     }
@@ -88,7 +95,7 @@ public class RestTransferService implements  TransferService{
 
    @Override
     public Transfer getTransferById(int id){
-        return transferDao.findByToId(id);
+        return transferDao.findById(id);
     }
 
     @Override

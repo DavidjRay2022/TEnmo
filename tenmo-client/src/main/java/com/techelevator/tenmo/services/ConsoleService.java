@@ -55,12 +55,17 @@ public class ConsoleService {
         System.out.println();
     }
 
-    public void printApproveOrDeny(){
-        System.out.println();
-        System.out.println("1: Approve the request");
-        System.out.println("2: Deny the request");
-        System.out.println("0: Exit");
-        System.out.println();
+    public String printApproveOrDeny(){
+
+        return "\n" +
+                "1: Approve the request\n" +
+                "2: Deny the request\n" +
+                "0: Exit\n";
+//        System.out.println();
+//        System.out.println("1: Approve the request");
+//        System.out.println("2: Deny the request");
+//        System.out.println("0: Exit");
+//        System.out.println();
     }
 
     public UserCredentials promptForCredentials() {

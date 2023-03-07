@@ -91,17 +91,17 @@ public class App {
 
 	private void viewCurrentBalance() {
 
-        System.out.printf("$%,.2f", accountService.getBalance(currentUser));
+        System.out.printf("\n ``` \n Your current account balance is: $%,.2f\n ```\n", accountService.getBalance(currentUser));
 	}
 
 	private void viewTransferHistory() {
 
         accountService.getFullTransferHistory(currentUser);
 
+
 	}
 
-    //TODO format the menu and toString in the model/Transfer
-    //if you want to edit the wording of the menu its in the console service line 49.
+
 	private void viewPendingRequests() {
         int menuSelection = -1;
         while (menuSelection != 0) {
@@ -111,33 +111,22 @@ public class App {
                 accountService.viewAllPendingRequests(currentUser);
             } else if (menuSelection == 2) { //FIXME not implemented fully!
                 int transferId = -1;
-                while(transferId != 0){
-                    accountService.viewReceivedRequests(currentUser);
-                    transferId = consoleService.promptForInt("Select a transfer id to approve or reject.");
-                    if(accountService.listOfTransferIds(accountService.viewReceivedRequests(currentUser)).contains(transferId)){
-                        int decision = -1;
-                        consoleService.printApproveOrDeny(); //transferId
-                        decision=  consoleService.promptForInt("Please select a number.");
-                        while(decision != 0){
-                            if(decision == 1){
-                                //approve
-                                accountService.approveTransfer(currentUser,transferId);
-                            } else if(decision == 2){
-                                //deny
-                            } else if(decision == 0){
-                                continue;
-                            } else{
-                                System.out.println("Invalid Selection");
-                            }
-                            consoleService.pause();
+                while (transferId != 0) {
+                    transferId = accountService.viewReceivedRequests(currentUser);
+                    int decision = consoleService.promptForInt(consoleService.printApproveOrDeny()); //transferId
+                    while (decision != 0) {
+                        if (decision == 1) {
+                            //approve
+                            accountService.approveTransfer(currentUser, transferId);
+                            continue;
+                        } else if (decision == 2) {
+                            // TODO deny
+                        } else {
+                            System.out.println("Invalid Selection");
                         }
-
-                    } else if (transferId == 0){
-                       continue;
-                    } else{
-                        System.out.println("Invalid Selection");
+                        consoleService.pause();
                     }
-                    consoleService.pause();
+
 
                 }
                 //TODO add more here.
@@ -158,8 +147,9 @@ public class App {
             }
             consoleService.pause();
         }
+    }
 		
-	}
+
 
 	private void sendBucks() {
 
@@ -173,6 +163,8 @@ public class App {
 	private void requestBucks() {
 
 		accountService.requestBucks(currentUser);
+
+
 	}
 
 }
